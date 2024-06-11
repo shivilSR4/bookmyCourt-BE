@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const USERS = require('../models/userModel');
+const jwt = require('jsonwebtoken')
 
 const doSignup = (req, res) => {
   USERS({
@@ -17,4 +18,32 @@ const doSignup = (req, res) => {
     });
 };
 
-module.exports = { doSignup };
+const doLogin = async (req, res) => {
+  try {
+   
+    const userdata = await USERS.findOne({ email: req.body.email });
+
+    
+    if (userdata) {
+     
+      if (userdata.password === req.body.password) {
+
+        const token = jwt.sign({userId:userdata._id,name:userdata.name,email:userdata.email,role:userdata.role},process.env.JWT_PASSWORD,{expiresIn:'2d'})
+        res.status(200).json({ message: "login success",token });
+
+      } else {
+        res.status(401).json({ message: "invalid credentials" });
+      }
+    } else {
+      res.status(401).json({ message: "invalid credentials" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "internal server error" });
+  }
+}
+
+  
+
+
+module.exports = { doSignup,doLogin};
