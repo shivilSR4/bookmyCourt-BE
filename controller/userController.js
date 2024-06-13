@@ -29,7 +29,7 @@ const doLogin = async (req, res) => {
       if (userdata.password === req.body.password) {
 
         const token = jwt.sign({userId:userdata._id,name:userdata.name,email:userdata.email,role:userdata.role},process.env.JWT_PASSWORD,{expiresIn:'2d'})
-        res.status(200).json({ message: "login success",token });
+        res.status(200).json({ message: "login success",token,userdata });
 
       } else {
         res.status(401).json({ message: "invalid credentials" });

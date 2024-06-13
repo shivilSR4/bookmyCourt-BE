@@ -8,6 +8,7 @@ const connectDB = require('./config/dbConfig')
 
 var authRouter = require('./routes/authRouter');
 var usersRouter = require('./routes/users');
+var adminRouter = require('./routes/admin')
 
 var app = express();
 app.use(cors())
@@ -28,6 +29,7 @@ connectDB()
 
 app.use('/users', usersRouter);
 app.use('/auth',authRouter)
+app.use('/admin',adminRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
